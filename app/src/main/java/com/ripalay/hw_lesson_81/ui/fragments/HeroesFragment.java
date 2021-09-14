@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ripalay.hw_lesson_81.R;
 import com.ripalay.hw_lesson_81.databinding.FragmentHeroesBinding;
@@ -17,7 +18,7 @@ import com.ripalay.hw_lesson_81.ui.models.HeroModel;
 
 import java.util.ArrayList;
 
-public class HeroesFragment extends Fragment {
+public class HeroesFragment extends Fragment implements HeroAdapter.OnClick {
     private FragmentHeroesBinding binding;
     private ArrayList<HeroModel> list = new ArrayList<>();
     private HeroAdapter adapter = new HeroAdapter();
@@ -75,7 +76,19 @@ public class HeroesFragment extends Fragment {
     }
 
     private void initRecycler() {
-        adapter.setList(createList());
+        adapter.setList(createList(), this);
         binding.heroRv.setAdapter(adapter);
+    }
+
+    @Override
+    public void onItemClick(HeroModel model) {
+        Bundle bundle = new Bundle();
+        ResultFragment getFragment = new ResultFragment();
+        bundle.putString("image", model.getImage());
+        bundle.putString("getLife", model.getLife());
+        bundle.putString("getName", model.getName());
+        getFragment.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, getFragment).commit();
+        Toast.makeText(requireContext(), model.getName(), Toast.LENGTH_SHORT).show();
     }
 }

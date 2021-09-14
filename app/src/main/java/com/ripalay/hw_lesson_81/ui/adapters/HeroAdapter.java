@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -16,21 +17,25 @@ import java.util.ArrayList;
 
 public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ViewHolder> {
     private ArrayList<HeroModel> list = new ArrayList<>();
+    private OnClick click;
 
-    public void setList(ArrayList<HeroModel> list) {
+    public void setList(ArrayList<HeroModel> list, OnClick click) {
         this.list = list;
+        this.click = click;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemHeroesBinding.inflate(LayoutInflater.from(parent.getContext()), parent,false));
+        return new ViewHolder(ItemHeroesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         holder.onBind(list.get(position));
+
 
     }
 
@@ -41,9 +46,12 @@ public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ItemHeroesBinding binding;
+
         public ViewHolder(@NonNull ItemHeroesBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+
         }
 
 
@@ -54,6 +62,15 @@ public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ViewHolder> {
                     .into(binding.heroIv);
             binding.lifeTv.setText(heroModel.getLife());
             binding.nameTv.setText(heroModel.getName());
+
+            itemView.setOnClickListener(v -> {
+                click.onItemClick(heroModel);
+            });
+
         }
+    }
+
+    public interface OnClick {
+        void onItemClick(HeroModel model);
     }
 }
