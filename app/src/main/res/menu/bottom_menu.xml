@@ -6,5 +6,8 @@
     <item android:id="@+id/locationFragment"
         android:title="Location"
         android:icon="@drawable/ic_location"/>
+    <item android:id="@+id/libraryFragment"
+        android:title="Library"
+        android:icon="@drawable/ic_location"/>
 
 </menu>
